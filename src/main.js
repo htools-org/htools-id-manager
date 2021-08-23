@@ -1,6 +1,14 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
-createApp(App).use(store).use(router).mount("#app");
+import { HandshakeLogin, Strategies } from 'handshake-login';
+import './assets/tailwind.css';
+
+const app = createApp(App);
+app.use(router);
+
+app.provide('$hLogin', new HandshakeLogin({ useDoh: true }));
+app.provide('$hStrategies', Strategies);
+
+app.mount('#app');
