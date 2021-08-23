@@ -1,10 +1,10 @@
 <template>
-  <div class="m-6">
+  <div class="p-6 text-gray-900">
     <section class="mt-16">
-      <h3 class="text-lg">Step 1: Generate Request URL</h3>
+      <h3 class="text-lg text-white">Step 1: Generate Request URL</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             <div class="grid grid-cols-3 gap-6">
               <div class="col-span-3 sm:col-span-1">
@@ -26,11 +26,11 @@
                   for="first_name"
                   class="block text-sm font-medium text-gray-700"
                 >
-                  Nonce
+                  Challenge
                   <input
                     type="text"
-                    v-model="nonce"
-                    placeholder="nonce"
+                    v-model="challenge"
+                    placeholder="challenge"
                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </label>
@@ -54,12 +54,12 @@
           <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
             <button
               @click="generateRequestUrl"
-              :disabled="!(domain && nonce && callbackUrl)"
+              :disabled="!(domain && challenge && callbackUrl)"
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
                 'opacity-50 cursor-not-allowed': !(
                   domain &&
-                  nonce &&
+                  challenge &&
                   callbackUrl
                 ),
               }"
@@ -68,7 +68,7 @@
             </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <span class="text-sm font-medium">Request URL:</span>
           <p v-if="reqUrl" class="mt-2 font-mono">
             {{ reqUrl }}
@@ -87,15 +87,15 @@
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 2: Select Strategy</h3>
+      <h3 class="text-lg text-white">Step 2: Select Strategy</h3>
 
-      <div class="flex mt-4 space-x-4">
+      <div class="flex gap-4 mt-4 space-x-4 overflow-auto text-white">
         <div
           v-for="strategy in $hStrategies"
           :key="strategy"
-          class="p-4 border rounded-md cursor-pointer"
+          class="flex-shrink-0 p-4 border rounded-md cursor-pointer"
           :class="{
-            'text-white bg-indigo-600': strategy.name == selectedStrategy.name,
+            'bg-indigo-600': strategy.name == selectedStrategy.name,
           }"
           @click="selectedStrategy = strategy"
         >
@@ -106,27 +106,27 @@
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 3: Get Device Registration Info</h3>
+      <h3 class="text-lg text-white">Step 3: Get Device Record</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             Get device info, generate new device id (and store) if new device.
           </div>
           <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
             <button
-              @click="getDeviceRegistration"
-              :disabled="!domain"
+              @click="getDeviceRecord"
+              :disabled="!reqUrl"
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
-                'opacity-50 cursor-not-allowed': !domain,
+                'opacity-50 cursor-not-allowed': !reqUrl,
               }"
             >
               Get
             </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <p class="mt-2 font-mono">
             <span class="text-sm font-medium">Device ID:</span>
             {{ deviceId || 'null' }}
@@ -147,51 +147,65 @@
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 4: Get Identity</h3>
+      <h3 class="text-lg text-white">Step 4: Get Identity Fingerprint</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             Get identity, generate new identity (and store) if new device.
           </div>
           <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
             <button
-              @click="getIdentity"
-              :disabled="!domain"
+              @click="getIdentity(false)"
+              :disabled="!reqUrl"
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
-                'opacity-50 cursor-not-allowed': !domain,
+                'opacity-50 cursor-not-allowed': !reqUrl,
               }"
             >
               Get
             </button>
+            <button
+              @click="getIdentity(true)"
+              :disabled="!reqUrl"
+              class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              :class="{
+                'opacity-50 cursor-not-allowed': !reqUrl,
+              }"
+            >
+              Force Generate
+            </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <div class="mt-4">
             <span class="text-sm font-medium">Identity:</span>
             <p v-if="identity" class="mt-2 font-mono">{{ identity }}</p>
           </div>
+          <p v-if="dnsRecord" class="mt-2 font-mono">
+            <span class="text-sm font-medium">DNS Record to add:</span>
+            {{ dnsRecord || 'null' }}
+          </p>
         </div>
       </div>
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 5: Verify identity</h3>
+      <h3 class="text-lg text-white">Step 5: Verify Identity</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             Check if this identity's fingerprint is trusted.
           </div>
           <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
             <button
               @click="verifyIdentity"
-              :disabled="!(domain && prefix && identity)"
+              :disabled="!(reqUrl && prefix && identity)"
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
                 'opacity-50 cursor-not-allowed': !(
-                  domain &&
+                  reqUrl &&
                   prefix &&
                   identity
                 ),
@@ -201,7 +215,7 @@
             </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <p class="mt-2 font-mono">
             <span class="text-sm font-medium">Identity Verified:</span>
             {{ identityVerified }}
@@ -211,21 +225,21 @@
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 6a: Register</h3>
+      <h3 class="text-lg text-white">Step 6a: Register</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             If identity is not verified, generate TXT record to add.
           </div>
           <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
             <button
               @click="registerIdentity"
-              :disabled="!(domain && prefix && identity)"
+              :disabled="!(reqUrl && prefix && identity)"
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
                 'opacity-50 cursor-not-allowed': !(
-                  domain &&
+                  reqUrl &&
                   prefix &&
                   identity
                 ),
@@ -235,7 +249,7 @@
             </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <div class="mt-4">
             <span class="text-sm font-medium">DNS Record:</span>
             <p v-if="txtRecord" class="mt-2 font-mono">{{ txtRecord }}</p>
@@ -248,10 +262,10 @@
     </section>
 
     <section class="mt-16">
-      <h3 class="text-lg">Step 6b: Login</h3>
+      <h3 class="text-lg text-white">Step 6b: Login</h3>
 
-      <div class="grid md:grid-cols-2">
-        <div class="mt-4 overflow-hidden rounded-md shadow">
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
           <div class="px-4 py-5 bg-white sm:p-6">
             If identity is verified, sign challenge (aka nonce / state).
           </div>
@@ -260,7 +274,7 @@
               @click="loginIdentity"
               :disabled="
                 !(
-                  domain &&
+                  reqUrl &&
                   prefix &&
                   callbackUrl &&
                   identity &&
@@ -270,7 +284,7 @@
               class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :class="{
                 'opacity-50 cursor-not-allowed': !(
-                  domain &&
+                  reqUrl &&
                   prefix &&
                   callbackUrl &&
                   identity &&
@@ -282,7 +296,7 @@
             </button>
           </div>
         </div>
-        <div class="p-3 mt-6 overflow-auto rounded shadow bg-gray-50">
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
           <span class="text-sm font-medium">Response URL:</span>
           <p v-if="resUrl" class="mt-2 font-mono">
             {{ resUrl }}
@@ -297,31 +311,61 @@
         </div>
       </div>
     </section>
+
+    <section class="mt-16">
+      <h3 class="text-lg text-white">Step 7: Verify Signature</h3>
+
+      <div class="grid gap-4 mt-4 md:grid-cols-2">
+        <div class="overflow-hidden rounded-md shadow">
+          <div class="px-4 py-5 bg-white sm:p-6">
+            Check if this the signature is valid.
+          </div>
+          <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
+            <button
+              @click="verifySignature"
+              :disabled="!resUrl"
+              class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              :class="{
+                'opacity-50 cursor-not-allowed': !resUrl,
+              }"
+            >
+              Verify Signature
+            </button>
+          </div>
+        </div>
+        <div class="p-3 overflow-auto rounded shadow bg-gray-50">
+          <p class="mt-2 font-mono">
+            <span class="text-sm font-medium">Signature Verified:</span>
+            {{ signatureVerified }}
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-// import HelloWorld from '@/components/HelloWorld.vue';
-
 export default {
   name: 'Test',
   inject: ['$hLogin', '$hStrategies'],
   components: {},
   data() {
     return {
-      domain: 'rithvik',
-      nonce: 'abcde',
-      callbackUrl: 'http://localhost',
+      domain: '',
+      challenge: '',
+      callbackUrl: '',
       reqUrl: '',
       reqData: {},
       selectedStrategy: {},
       deviceId: '',
       prefix: '',
       deviceInfo: {},
+      dnsRecord: {},
+      txtRecord: '',
       identity: {},
       identityVerified: null,
-      txtRecord: {},
       signature: '',
+      signatureVerified: null,
       resUrl: '',
       resData: {},
     };
@@ -329,69 +373,54 @@ export default {
   mounted() {
     console.log(this.$hLogin);
     console.log(this.$hStrategies);
+    this.generateRequestUrl();
   },
   methods: {
     async generateRequestUrl() {
       this.reqUrl = '';
-      this.reqUrl = await this.$hLogin.generateRequestUrl(
-        this.domain,
-        this.nonce,
-        this.callbackUrl
-      );
+      this.reqData = {};
+      this.reqUrl = await this.$hLogin.generateRequestUrl({
+        domain: this.domain,
+        challenge: this.challenge,
+        callbackUrl: this.callbackUrl,
+      });
+      this.reqData = await this.$hLogin.parseRequestDataFromUrl(this.reqUrl);
     },
-    async getDeviceRegistration() {
+    async getDeviceRecord() {
       this.deviceId = await this.$hLogin.getDeviceId();
-      this.prefix = await this.$hLogin.getPrefix(this.domain, this.deviceId);
-      this.deviceInfo = await this.$hLogin.getDeviceRegistration(
-        this.domain,
-        this.prefix
-      );
+      this.prefix = await this.$hLogin.getPrefix();
+      this.deviceInfo = await this.$hLogin.getDeviceRecord();
     },
-    async getIdentity() {
-      this.identity = await this.$hLogin.getIdentity(this.domain);
-      if (!this.identity) {
-        this.identity = await this.$hLogin.generateIdentity(this.domain);
+    async getIdentity(forceGenerate = false) {
+      if (!forceGenerate && this.deviceInfo) {
+        this.identity = await this.$hLogin.getIdentity();
+      } else {
+        this.identity = await this.$hLogin.generateIdentity();
       }
+      this.dnsRecord = await this.$hLogin.generateDnsRecord();
     },
     async verifyIdentity() {
       if (!this.deviceInfo) {
         this.identityVerified = false;
         return;
       }
-      this.identityVerified = await this.$hLogin.verifyFingerprint(
-        this.domain,
-        this.prefix,
-        this.identity.fingerprint
-      );
+      this.identityVerified = await this.$hLogin.verifyFingerprintWithDNS();
     },
     async registerIdentity() {
-      this.txtRecord = await this.$hLogin.formatDnsRecordToAdd(
-        this.domain,
-        this.prefix,
-        this.identity.fingerprint
-      );
+      this.dnsRecord = await this.$hLogin.generateDnsRecord();
+      this.txtRecord = `${this.dnsRecord.name}  IN  TXT  "${this.dnsRecord.value}"`;
     },
     async loginIdentity() {
-      this.signature = await this.$hLogin.sign(this.domain, this.nonce);
-      this.resUrl = await this.$hLogin.generateResponseUrl(
-        this.domain,
-        this.prefix,
-        this.identity.publicKey,
-        this.signature,
-        this.callbackUrl
-      );
-      this.resData = JSON.parse(
-        atob(this.resUrl.slice(this.resUrl.indexOf('#') + 1).trim())
-      );
+      this.signature = await this.$hLogin.sign();
+      this.resUrl = await this.$hLogin.generateResponseUrl();
+      this.resData = await this.$hLogin.parseResponseDataFromUrl(this.resUrl);
+    },
+    async verifySignature() {
+      this.resData = await this.$hLogin.parseResponseDataFromUrl(this.resUrl); // REMOVE LATER
+      this.signatureVerified = await this.$hLogin.verify(this.challenge);
     },
   },
   watch: {
-    async reqUrl() {
-      this.reqData = {};
-      if (this.reqUrl) {
-        this.reqData = await this.$hLogin.parseRequestData(this.reqUrl);
-      }
-    },
     selectedStrategy() {
       if (this.selectedStrategy.name) {
         this.$hLogin.useStrategy(new this.selectedStrategy.strategy());
