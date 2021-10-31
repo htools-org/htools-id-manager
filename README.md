@@ -23,6 +23,10 @@ Value: v=0;url=https://id.htools.work
 
 Contributions are always welcome! However, please create an issue before starting any work so there won't be any repeated/wasted effort.
 
+## Issues / Bugs
+
+Feel free to [create a new issue](https://github.com/htools-org/htools-id-manager/issues/new) with any problems you face with the library.
+
 ## Development
 
 Clone the project
@@ -55,3 +59,5 @@ npm run build
 - [Namebase Developer docs](https://docs.namebase.io/handshake-login/oidc) for the concept
 - [Namebase ID Manager](https://github.com/namebasehq/handshake-id-manager) for code reference and the first strategy
 - [@Falci's gist](https://gist.github.com/Falci/8e12be1b9538c4521a3d312a02e4682d) for basic functions and simplified flow
+
+**Proudly supported by [HandyOSS](https://github.com/HandyOSS/HandyGrants).**
