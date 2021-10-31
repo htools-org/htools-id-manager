@@ -4,10 +4,10 @@
   "private": true,
   "description": "An Identity Manager that uses Handshake Login and works with all supported strategies.",
   "license": "MIT",
-  "repository": "git://github.com/rithvikvibhu/htools-id-manager.git",
-  "homepage": "https://github.com/rithvikvibhu/htools-id-manager",
+  "repository": "git://github.com/htools-org/htools-id-manager.git",
+  "homepage": "https://github.com/htools-org/htools-id-manager",
   "bugs": {
-    "url": "https://github.com/rithvikvibhu/htools-id-manager/issues"
+    "url": "https://github.com/htools-org/htools-id-manager/issues"
   },
   "keywords": [
     "hns",

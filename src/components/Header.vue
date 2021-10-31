@@ -8,7 +8,7 @@
       >hTools</a
     >
     <a
-      href="https://github.com/rithvikvibhu/htools-id-manager"
+      href="https://github.com/htools-org/htools-id-manager"
       target="_blank"
       ref="noopener noreferrer"
     >

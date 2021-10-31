@@ -6,7 +6,7 @@
     <p class="mt-6 text-lg">
       Uses
       <a
-        href="https://github.com/rithvikvibhu/handshake-login"
+        href="https://github.com/htools-org/handshake-login"
         class="font-mono font-light underline"
         >handshake-login</a
       >

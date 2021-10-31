@@ -1,8 +1,8 @@
 # hTools Identity Manager
 
-[![License](https://img.shields.io/npm/l/htools-identity-manager)](https://github.com/rithvikvibhu/htools-identity-manager/blob/master/LICENSE) [![GitHub issues](https://img.shields.io/github/issues/rithvikvibhu/htools-identity-manager)](https://github.com/rithvikvibhu/htools-identity-manager/issues)
+[![License](https://img.shields.io/npm/l/htools-identity-manager)](https://github.com/htools-org/htools-identity-manager/blob/master/LICENSE) [![GitHub issues](https://img.shields.io/github/issues/htools-org/htools-identity-manager)](https://github.com/htools-org/htools-identity-manager/issues)
 
-An Identity Manager that uses [`handshake-login`](https://github.com/rithvikvibhu/handshake-login) and works with all supported strategies.
+An Identity Manager that uses [`handshake-login`](https://github.com/htools-org/handshake-login) and works with all supported strategies.
 
 ## Features
 
@@ -32,7 +32,7 @@ Feel free to [create a new issue](https://github.com/htools-org/htools-id-manage
 Clone the project
 
 ```sh
-git clone git@github.com:rithvikvibhu/htools-identity-manager.git
+git clone git@github.com:htools-org/htools-identity-manager.git
 cd htools-identity-manager
 ```
 
