@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'HomePage',
   computed: {
     dnsRecordString() {
       return `Type:  TXT

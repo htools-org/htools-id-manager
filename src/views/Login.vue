@@ -166,7 +166,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'LoginPage',
   inject: ['$hLogin', '$hStrategies'],
   components: {},
   data() {
